@@ -9,6 +9,6 @@ pytesseract
 pandas
 numpy
 datasets
-sklearn
-PIL
+scikit-learn
+pillow
 tqdm

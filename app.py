@@ -104,8 +104,8 @@ def rename_file(old_name):
 @app.route('/run_inference', methods=['GET'])
 def run_inference():
     # defining inference parameters
-    model_path = r"model" # path to Layoutlmv3 model
-    images_path = r"static/uploads" # images folder
+    model_path =  Path(r'model') # path to Layoutlmv3 model
+    images_path =  Path(r'static/uploads')# images folder
     # Build the command
     subprocess.check_call([sys.executable, "predictions/inference/run_inference.py", "--model_path", model_path, "--images_path", images_path])
     return redirect(url_for('create_csv'))
@@ -218,4 +218,4 @@ def update_data():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True)

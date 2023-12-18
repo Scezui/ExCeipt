@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <!--Page Title-->
+    <title>ExCeipt</title>
+
+    <!--Meta Keywords and Description-->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/static/images/favicon.ico" title="Favicon" />
+
+    <!-- Main CSS Files -->
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- Color CSS -->
+    <link rel="stylesheet" href="/static/css/color.css">
+
+    <!--Icon Fonts - Font Awesome Icons-->
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0//static/css/all.min.css">
+    <!-- Animate CSS-->
+    <link href="/static/css/animate.css" rel="stylesheet" type="text/css">
+
+    <!--Google Webfonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+</head>
+
+<body style="background-color: transparent; padding:0; margin:0; scroll-behavior: smooth;">
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="ocrloader" id="status">
+            <em></em>
+            <div>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i>
+            </div>
+            <span></span>
+        </div>
+    </div>
+    <!--End of Preloader-->
+
+    <div class="page-border" data-wow-duration="0.7s" data-wow-delay="0.2s">
+        <div class="top-border wow fadeInDown animated" style="visibility: visible; animation-name: fadeInDown;"></div>
+        <div class="right-border wow fadeInRight animated" style="visibility: visible; animation-name: fadeInRight;"></div>
+        <div class="bottom-border wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;"></div>
+        <div class="left-border wow fadeInLeft animated" style="visibility: visible; animation-name: fadeInLeft;"></div>
+    </div>
+
+    <div id="wrapper">
+
+        <header id="banner" class="scrollto clearfix" data-enllax-ratio=".5">
+            <div id="header" class="nav-collapse">
+                <div class="row clearfix">
+                    <div class="col-1">
+
+                        <!--Logo-->
+                        <div id="logo">
+
+                            <!--Logo that is shown on the banner-->
+                            <img src="/static/images/logo.png" id="banner-logo" alt="Landing Page" />
+                            <!--End of Banner Logo-->
+
+                            <!--The Logo that is shown on the sticky Navigation Bar-->
+                            <img src="/static/images/logo.png" id="navigation-logo" alt="Landing Page" />
+                            <!--End of Navigation Logo-->
+
+                        </div>
+                        <!--End of Logo-->
+
+
+                        <!--Main Navigation-->
+                        <nav id="nav-main">
+                            <aside>
+                                <ul>
+                                    <li>
+                                        <a href="#about">About</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Paper</a>
+                                    </li>
+                                </ul>
+                        </nav>
+                        </aside>
+                        <!--End of Main Navigation-->
+
+                        <div id="nav-trigger"><span></span></div>
+                        <nav id="nav-mobile"></nav>
+
+                    </div>
+                </div>
+            </div>
+            <!--End of Header-->
+            <div class="wall">
+                <div class="row1"><span>Simplify</span><span>Text</span><span>Extraction</span><span>for</span><span>Effortless</span><span>Expense</span><span>Management</span><span>tasks</span></div>
+                <div class="row1"><span>Optimize</span><span>Expense</span><span>Tracking</span><span>with</span><span></span><span>ExCeipt</span><span>Intelligent</span><span>Automation</span></div>
+                <div class="row1"><span>Make</span><span>Life</span><span>Easier</span><span>for</span><span>Everyone</span><span>with</span><span>ExCeipt's</span><span>Smart</span><span>Text</span><span>Extraction</span></div>
+                <div class="row1"><span>ExCeipt</span><span>Seamless</span><span>Text</span><span>Extraction</span><span>Every</span><span>Day</span><span>and</span><span>Productive</span><span>Day</span></div>
+                <div class="row1"><span>Prosper</span><span>with</span><span>Effortless</span><span>Text</span><span>Extraction</span><span>Thanks</span><span>to</span><span>ExCeipt</span><span>Automation</span></div>
+            </div>
+
+            <!-- Banner Content -->
+            <div id="banner-content" class="row clearfix">
+                <!-- Left column -->
+                <h1>
+
+                </h1>
+                <div class="col-lg-3 wow bounceInUp" data-wow-offset="0" data-wow-duration="2s" data-wow-delay="0.1s">
+                    <h1>Text Extraction <span class="easytext">Made Easy</span> with ExCeipt</h1>
+                    <h2>Effortlessly Extract Receipt Information for Seamless Expense Management. Streamline your expense tracking with ExCeipt's intelligent receipt extraction.</h2>
+                </div>
+                <!-- right (wider) -->
+                <div class="col-lg-6 wow bounceInUp" data-wow-offset="0" data-wow-duration="2s" data-wow-delay="0.2s">
+                    <div class="uploadbuttons wow bounceInUp" data-wow-offset="5" data-wow-duration="2s" data-wow-delay="0.3s">
+                        <form action="/upload" method="POST" enctype="multipart/form-data">
+                            <div class="container">
+                                <div class="drag-area" id="container">
+                                    <div class="icon">
+                                        <img src="/static/images/uplogo.gif">
+                                    </div>
+                                    <p>Upload files here or click to upload</p>
+                                    <input type="file" name="file" id="file-input">
+                                    <p id="uploaded-file-name">{% if uploaded_file %}Uploaded File: {{ uploaded_file }}{% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="buttondiv">
+                                <button class="uploadbutton" type="submit" value="Upload">Upload
+                    <div class="star-1">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 784.11 815.53" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" xml:space="preserve"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#FFA07A" />
+                                <stop offset="100%" style="stop-color:#FF6347" />
+                              </linearGradient>
+                            </defs>
+                            <g id="Layer_x0020_1">
+                              <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                              <!-- Apply the gradient to the fill attribute of the path -->
+                              <path d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" class="fil0" fill="url(#myGradient)"></path>
+                            </g>
+                          </svg>
+                    </div>
+                    <div class="star-2">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 784.11 815.53" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" xml:space="preserve"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#FFA07A" />
+                                <stop offset="100%" style="stop-color:#FF6347" />
+                              </linearGradient>
+                            </defs>
+                            <g id="Layer_x0020_1">
+                              <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                              <!-- Apply the gradient to the fill attribute of the path -->
+                              <path d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" class="fil0" fill="url(#myGradient)"></path>
+                            </g>
+                          </svg>
+                    </div>
+                    <div class="star-3">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 784.11 815.53" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" xml:space="preserve"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#FFA07A" />
+                                <stop offset="100%" style="stop-color:#FF6347" />
+                              </linearGradient>
+                            </defs>
+                            <g id="Layer_x0020_1">
+                              <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                              <!-- Apply the gradient to the fill attribute of the path -->
+                              <path d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" class="fil0" fill="url(#myGradient)"></path>
+                            </g>
+                          </svg>
+                    </div>
+                    <div class="star-4">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 784.11 815.53" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" xml:space="preserve"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#FFA07A" />
+                                <stop offset="100%" style="stop-color:#FF6347" />
+                              </linearGradient>
+                            </defs>
+                            <g id="Layer_x0020_1">
+                              <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                              <!-- Apply the gradient to the fill attribute of the path -->
+                              <path d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" class="fil0" fill="url(#myGradient)"></path>
+                            </g>
+                          </svg>
+                    </div>
+                    
+                    <div class="star-5">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 784.11 815.53" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" xml:space="preserve"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#FFA07A" />
+                                <stop offset="100%" style="stop-color:#FF6347" />
+                              </linearGradient>
+                            </defs>
+                            <g id="Layer_x0020_1">
+                              <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                              <!-- Apply the gradient to the fill attribute of the path -->
+                              <path d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" class="fil0" fill="url(#myGradient)"></path>
+                            </g>
+                          </svg>
+                    </div>
+                    <div class="star-6">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 784.11 815.53" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" version="1.1" xml:space="preserve"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#FFA07A" />
+                                <stop offset="100%" style="stop-color:#FF6347" />
+                              </linearGradient>
+                            </defs>
+                            <g id="Layer_x0020_1">
+                              <metadata id="CorelCorpID_0Corel-Layer"></metadata>
+                              <!-- Apply the gradient to the fill attribute of the path -->
+                              <path d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z" class="fil0" fill="url(#myGradient)"></path>
+                            </g>
+                          </svg>
+                    
+                     </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <!--End of Row-->
+        </header>
+    </div>
+    <!-- Include JavaScript resources -->
+    <script src="/static/js/jquery.1.8.3.min.js"></script>
+    <script src="/static/js/wow.min.js"></script>
+    <script src="/static/js/featherlight.min.js"></script>
+    <script src="/static/js/featherlight.gallery.min.js"></script>
+    <script src="/static/js/jquery.enllax.min.js"></script>
+    <script src="/static/js/jquery.scrollUp.min.js"></script>
+    <script src="/static/js/jquery.easing.min.js"></script>
+    <script src="/static/static/js/jquery.stickyNavbar.min.js"></script>
+    <script src="/static/js/jquery.waypoints.min.js"></script>
+    <script src="/static/js/images-loaded.min.js"></script>
+    <script src="/static/js/lightbox.min.js"></script>
+    <script src="/static/js/site.js"></script>
+</body>
+
+
+</html>

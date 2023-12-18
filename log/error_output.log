@@ -1,0 +1,23 @@
+2023-12-15 22:08:28,556 ERROR __main__ The `bbox` coordinate values should be within 0-1000 range.
+2023-12-15 22:25:13,644 ERROR __main__ [WinError 3] The system cannot find the path specified: '{imag_path}'
+2023-12-15 22:27:05,205 ERROR __main__ name 'keras_ocr' is not defined
+2023-12-15 22:35:49,620 ERROR __main__ 'bboxes'
+2023-12-15 22:39:15,225 ERROR __main__ 'bboxes'
+2023-12-16 01:01:21,726 ERROR __main__ name 'requests' is not defined
+2023-12-16 01:03:33,968 ERROR __main__ name 'requests' is not defined
+2023-12-16 01:08:14,487 ERROR __main__ name 'requests' is not defined
+2023-12-16 01:09:30,329 ERROR __main__ name 'requests' is not defined
+2023-12-16 01:10:18,781 ERROR __main__ name 'requests' is not defined
+2023-12-16 01:12:35,305 ERROR __main__ name 'tsv_output_path' is not defined
+2023-12-16 01:13:41,929 ERROR __main__ name 'tsv_output_path' is not defined
+2023-12-16 01:29:13,998 ERROR __main__ The `bbox` coordinate values should be within 0-1000 range.
+2023-12-16 20:52:33,964 ERROR __main__ [WinError 3] The system cannot find the path specified: 'uploads'
+2023-12-17 18:38:42,915 ERROR __main__ 'NoneType' object is not iterable
+2023-12-17 18:40:35,893 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:04:43,244 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:41:13,323 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:41:47,344 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:46:34,913 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:46:45,983 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:51:56,799 ERROR __main__ 'NoneType' object is not iterable
+2023-12-18 18:52:10,931 ERROR __main__ 'NoneType' object is not iterable

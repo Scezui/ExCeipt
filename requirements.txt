@@ -1,0 +1,16 @@
+git+https://github.com/huggingface/transformers.git
+git+https://github.com/huggingface/datasets.git
+dill<0.3.5
+seqeval
+accelerate
+flask
+fastai==1.0.61
+pytesseract
+pandas
+numpy
+os
+argparse
+datasets
+sklearn
+PIL
+tqdm

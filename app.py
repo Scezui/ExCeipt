@@ -57,7 +57,7 @@ def make_prediction(image_path):
         # temp = pathlib.PosixPath  # Save the original state
         # pathlib.PosixPath = pathlib.WindowsPath  # Change to WindowsPath temporarily
 
-        model_path = Path(r'model\export')
+        model_path = Path(r'model/export')
 
         learner = load_learner(model_path)
 
@@ -116,8 +116,8 @@ def run_inference():
 def create_csv():
     try:
         # Load JSON data from file
-        json_file_path = r"temp\LayoutlMV3InferenceOutput.json"  # path to JSON file
-        output_file_path = r"inferenced\output.csv"  # path to output CSV file
+        json_file_path = r"temp/LayoutlMV3InferenceOutput.json"  # path to JSON file
+        output_file_path = r"inferenced/output.csv"  # path to output CSV file
 
         with open(json_file_path, 'r') as file:
             data = json.load(file)

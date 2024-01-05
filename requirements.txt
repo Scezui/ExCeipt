@@ -8,9 +8,5 @@ fastai==1.0.61
 pytesseract
 pandas
 numpy
-os
-argparse
-datasets
-sklearn
-PIL
+pillow
 tqdm

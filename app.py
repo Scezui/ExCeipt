@@ -103,6 +103,14 @@ def rename_file(old_name):
 
         # Call make_prediction automatically
         prediction_result = make_prediction(new_file_path)
+        
+        
+        # Ensure prediction_result is a string
+        if not isinstance(prediction_result, str):
+            prediction_result = str(prediction_result)
+
+        # Convert prediction_result to lowercase string
+        prediction_result = prediction_result.lower()
 
         return render_template('extractor.html', uploaded_file=new_name, old_name=old_name, prediction_result=prediction_result)
     else:

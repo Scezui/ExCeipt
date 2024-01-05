@@ -347,7 +347,7 @@
             <div class="receipt">
                 <div class="details">
             <div style="display: flex; align-items: center;">
-            {% if prediction_result.lower() == 'receipt' %}
+			{% if prediction_result | default('').lower() == 'receipt' %}
             <lord-icon
                 src="https://cdn.lordicon.com/lomfljuq.json"
                 trigger="in"

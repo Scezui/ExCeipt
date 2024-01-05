@@ -68,8 +68,8 @@ def upload_file():
 
 def make_prediction(image_path):
     try:
-        temp = pathlib.PosixPath  # Save the original state
-        pathlib.PosixPath = pathlib.WindowsPath  # Change to WindowsPath temporarily
+        # temp = pathlib.PosixPath  # Save the original state
+        # pathlib.PosixPath = pathlib.WindowsPath  # Change to WindowsPath temporarily
 
         model_path = Path(r'model\export')
 
@@ -88,8 +88,8 @@ def make_prediction(image_path):
 
     except Exception as e:
         return {"error": str(e)}
-    finally:
-        pathlib.PosixPath = temp 
+    # finally:
+    #     pathlib.PosixPath = temp 
 
 
 @app.route('/rename/<old_name>', methods=['GET', 'POST'])

@@ -22,7 +22,10 @@
 
     <!--Google Webfonts-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <title>Extractor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+    <title>ExCeipt | Extractor</title>
     <style>
         .containerz {
             display: flex;
@@ -42,10 +45,10 @@
         }
         
         .right-column {
-            flex: 3;
+            flex: 2;
             background-color: #ffffff;
             padding: 20px;
-            overflow: hidden;
+            overflow: auto; /* or 'visible' or 'scroll' */
         }
         
         .backbutton {
@@ -70,7 +73,7 @@
             text-decoration: none;
             color: black;
             font-family: 'Poppins', sans-serif, Arial, Helvetica;
-            font-size: 17px;
+            font-size: 14px;
             font-weight: 300;
         }
         
@@ -149,24 +152,45 @@
         #logox img {
             position: relative;
             object-position: center;
-            width: 30%;
-            height: 30%;
-            padding: 10px 10px 35px 10px;
+            width: 25%;
+            height: 25%;
+            padding: 10px 10px 10px 10px;
         }
-        
+       
         .receipt {
-            margin: 50px 30px;
-            padding: 10px;
+            margin: 20px 20px;
             border: 1px solid #ccc;
-            border-radius:20px;
+            border-radius: 10px;
+            font:14px;
         }
-        
+        .receipt1 {
+            margin: 20px 20px;
+            font:14px;
+        }
+        .receipt1 table {
+            border-radius:10px;
+        }
+        .filenm{
+            padding: 1em 1.8em;
+            box-sizing: border-box;
+            border-radius: 10px;
+            display: flex;
+            transition: 0.2s background;
+            align-items: center;
+            gap: 0.6em;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
         .receipt h1 {
             text-align: center;
         }
         
         .receipt .details {
-            margin: 0px 15px 20px 15px;
+            margin: 0px 0px 0px 15px;
         }
         
         .receipt table {
@@ -191,18 +215,32 @@
             font-weight: bold;
         }
         #dataTable {
+            border-radius:10px;
+            border-collapse: collapse;
+            width: 100%;
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            overflow-x: auto;
+        }
+        #receiptdiv{
             display: none;
         }
-        #applyChangesButton {
+        #dataTable th, #dataTable td {
+            font-size: 12px;
+            text-align: center;
+            padding: 3px;
+        }
+        #downloadbutton {
             display: none;
         }
         #loadingSpinner {
-            position: absolute;
-            top: 50%;
+            position: relative;
+            top: 20%;
             left: 50%;
             transform: translate(-50%, -50%);
             border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #FF8B4A;
             border-radius: 50%;
             width: 30px;
             height: 30px;
@@ -218,7 +256,32 @@
             cursor: not-allowed;
             background-color: #dddddd;
         }
+        .labels {
+            margin: 0 0 0 20px;
+            font-weight: 500;
+        }
+        .labels p{
+            font-size: 14px;
+            padding-top: 8px;
+            line-height: 15px;
+            color:ccc;
+        }
+        #filenm{
+            position: relative;
+            z-index:999;
+        }
+        .valid{
+            padding-left:8px; 
+            font-weight:300; 
+            font-size:14px;
+        }
+       .details1{
+        border-radius:10px;
+        z-index:-1;
+       }
+          
     </style>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
 </head>
 
 <body>
@@ -235,20 +298,40 @@
     </div>
 </div>
 <!--End of Preloader-->
-
+<div id="flash-container" class="alert alert-danger" role="alert">
+    <!-- Flash message will be displayed here -->
+</div>
     <div class="containerz">
+        
         <div class="left-column">
             <button class="backbutton" id="submitButton" onclick="window.location.href='{{ url_for('index') }}'">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Back</span>
               </button>
+              <div id="filenm">
+                    <div style="display: flex; align-items: center; position: absolute; top: 10px; right: 0;">
+                        <span class="filenm">
+                            <lord-icon
+                        src="https://cdn.lordicon.com/xpgofwru.json"
+                        trigger="in"
+                        delay ="500"
+                        state="hover-file-2"
+                        colors="primary:#ff8b4a"
+                        style="width:20px;height:20px">
+                    </lord-icon>
+                    {{ old_name }}</span>
+                      </button>
+                </div>
+            </div>
+            
+
             <div id="canvas-container">
                 <canvas id="c3"></canvas>
                 {% if uploaded_file %}
-        <img src="{{ url_for('static', filename='uploads/' + uploaded_file) }}" id="my-image" hidden>
-        {% else %}
-            <p>No file uploaded.</p>
-        {% endif %}
+            <img src="{{ url_for('static', filename='uploads/' + uploaded_file) }}" id="my-image" hidden>
+            {% else %}
+                <p>No file uploaded.</p>
+            {% endif %}
                
             </div>
         </div>
@@ -257,15 +340,55 @@
                 <img src="/static/images/logo.png" id="banner-logo" alt="Landing Page" />
             </div>
             
+            <div style="display: flex; align-items: center;">
+           </div>
+           <hr style="color: #ccc; width:95%; opacity:0.35;">
+            <div class="labels" style="margin: 0 0 0 20px;"><p>Receipt Verification</p></div>
             <div class="receipt">
                 <div class="details">
-                    <p> {{ prediction_result }}</p>
-                    <p> {{ old_name }}</p>
-                    <a href="{{ url_for('run_inference') }}">
-                        <button id="uploadbutton" class="uploadbutton" type="submit">Extract</button>
-                    </a>
-                    <hr>
-                   
+            <div style="display: flex; align-items: center;">
+            {% if prediction_result.lower() == 'receipt' %}
+            <lord-icon
+                src="https://cdn.lordicon.com/lomfljuq.json"
+                trigger="in"
+                delay="1500"
+                colors="primary:#16c72e"
+                state="morph-check-in-1"
+                style="width:25px;height:25px">
+            </lord-icon>
+            <p class="valid">The image uploaded is a Valid Receipt.</p>
+            {% else %}
+            <lord-icon
+                src="https://cdn.lordicon.com/zxvuvcnc.json"
+                trigger="in"
+                delay="1500"
+                state="morph-cross-in"
+                colors="primary:#e83a30"
+                style="width:25px;height:25px">
+            </lord-icon>
+            <p class="valid">The image uploaded is NOT a Receipt Please return and upload again.</p>
+            {% endif %}
+            </div>
+        </div>
+        </div>
+        <hr style="color: #ccc; width:95%; opacity:0.35;">
+        <div class="labels"><p>Text Extraction</p></div>
+        <div style="text-align: center;">
+            <a href="{{ url_for('run_inference') }}">
+                <button id="uploadbutton" class="uploadbutton" type="submit">Extract</button>
+            </a>
+        </div>
+        <div class="loader" id="loader">
+            <em></em>
+            <div>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i>
+            </div>
+            <span></span>
+          </div>
+            <div class="receipt1" id="receiptdiv">
+                <div class="details1">
                     <table id="dataTable" border="1">
                         <thead>
                             <tr>
@@ -283,133 +406,90 @@
                         <tbody>
                         </tbody>
                     </table>
-                    <button id="applyChangesButton">Apply Changes</button>
                  </div>
           </div>
+          <hr style="color: #ccc; width:95%; opacity:0.35;">
+          <div class="labels" style="margin: 0 0 0 20px;"><p>Export</p></div>
+          <div style="text-align: center;">
+            <a href="{{ url_for('download_csv') }}">
+                <button id="downloadbutton" class="uploadbutton" type="submit">Export CSV</button>
+            </a>
+        </div>
     </div>
-    <div id="loadingSpinner"></div>
+    
+    <a href="https://lordicon.com/" hidden >Icons by Lordicon.com</a>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dataTable = document.getElementById('dataTable');
-            const applyChangesButton = document.getElementById('applyChangesButton');
-            const loadingSpinner = document.getElementById('loadingSpinner'); // New line
-            const runInferenceButton = document.getElementById('uploadbutton'); // New line
+        
+    document.addEventListener('DOMContentLoaded', function() {
+        const dataTable = document.getElementById('receiptdiv');
+        const loadingSpinner = document.getElementById('loader');
+        const runInferenceButton = document.getElementById('uploadbutton');
+        const exportCSVButton = document.getElementById('downloadbutton');
 
-   
-            document.getElementById('uploadbutton').addEventListener('click', function () {
-                loadingSpinner.style.display = 'inline-block'; // Show loading spinner
-                runInferenceButton.disabled = true; 
-                runInference();
-            });
-
-            document.getElementById('applyChangesButton').addEventListener('click', function () {
-                applyChanges();
-            });
-
-            async function getData() {
-                const response = await fetch('/get_data');
-                const data = await response.text();
-
-                updateTable(data);
-
-                // Show the table when data is updated
-                dataTable.style.display = 'table';
-                // Show the "Apply Changes" button
-                applyChangesButton.style.display = 'inline-block';
-            }
-
-            async function runInference() {
-                await fetch('/run_inference');
-                // Wait for inference to complete (you may need to adjust this based on your application)
-                setTimeout(function () {
-                    getData();
-                    loadingSpinner.style.display = 'none';
-                    runInferenceButton.disabled = false;
-                }, 5000); // Wait for 5 seconds before updating the table
-            }
-
-            function updateTable(data) {
-                const table = data.split('\n').slice(1);
-                const tbody = document.querySelector('#dataTable tbody');
-                tbody.innerHTML = ''; // Clear existing rows
-
-                table.forEach(row => {
-                    const column = row.split(',');
-                    const RECEIPTNUMBER = column[0];
-                    const MERCHANTNAME = column[1];
-                    const MERCHANTADDRESS = column[2];
-                    const TRANSACTIONDATE = column[3];
-                    const TRANSACTIONTIME = column[4];
-                    const ITEMS = column[5];
-                    const PRICE = column[6];
-                    const TOTAL = column[7];
-                    const VATTAX = column[8];
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td contenteditable="true">${RECEIPTNUMBER}</td>
-                        <td contenteditable="true">${MERCHANTNAME}</td>
-                        <td contenteditable="true">${MERCHANTADDRESS}</td>
-                        <td contenteditable="true">${TRANSACTIONDATE}</td>
-                        <td contenteditable="true">${TRANSACTIONTIME}</td>
-                        <td contenteditable="true">${ITEMS}</td>
-                        <td contenteditable="true">${PRICE}</td>
-                        <td contenteditable="true">${TOTAL}</td>
-                        <td contenteditable="true">${VATTAX}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            function applyChanges() {
-                const tbody = document.querySelector('#dataTable tbody');
-                const rows = tbody.querySelectorAll('tr');
-            
-                // Create an array to store the updated data
-                const updatedData = [];
-            
-                rows.forEach(row => {
-                    const columns = row.querySelectorAll('td');
-                    const rowData = [];
-            
-                    columns.forEach(column => {
-                        rowData.push(column.textContent.trim());
-                    });
-            
-                    updatedData.push(rowData.join(','));
-                });
-            
-                // Send the updated data to the server
-                fetch('/update_data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ data: updatedData })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        console.log('Data updated:', result.message);
-            
-                        // Optionally, you can update the table again after changes are applied
-                        getData();
-            
-                        // Show the download button only if there are updates
-                        if (result.updates) {
-                            downloadButton.style.display = 'inline-block';
-                        }
-                    } else {
-                        console.error('Error updating data:', result.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error updating data:', error);
-                });
-            }
-            
+        document.getElementById('uploadbutton').addEventListener('click', function() {
+            loadingSpinner.style.display = 'inline-block'; // Show loading spinner
+            runInferenceButton.disabled = true;
+            runInference();
         });
+
+
+
+        async function runInference() {
+            await fetch('/run_inference');
+
+            setTimeout(function() {
+                loadingSpinner.style.display = 'none';
+                runInferenceButton.style.display = 'none';
+                exportCSVButton.style.display = 'inline-block';
+				
+				getData();
+            }, 500);
+        }
+
+        async function getData() {
+            const response = await fetch('/get_data');
+            const data = await response.text();
+
+            updateTable(data);
+
+            // Show the table when data is updated
+            dataTable.style.display = 'table';
+        }
+        function updateTable(data) {
+            const table = data.split('\n').map(row => row.trim()).filter(Boolean).slice(1);
+            const tbody = document.querySelector('#dataTable tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            table.forEach(row => {
+                const column = row.split('|');
+                const RECEIPTNUMBER = column[0] || ''; // Set to an empty string if undefined
+                const MERCHANTNAME = column[1] || '';
+                const MERCHANTADDRESS = column[2] || '';
+                const TRANSACTIONDATE = column[3] || '';
+                const TRANSACTIONTIME = column[4] || '';
+                const ITEMS = column[5] || '';
+                const PRICE = column[6] || '';
+                const TOTAL = column[7] || '';
+                const VATTAX = column[8] || '';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td contenteditable="true">${RECEIPTNUMBER}</td>
+                    <td contenteditable="true">${MERCHANTNAME}</td>
+                    <td contenteditable="true">${MERCHANTADDRESS}</td>
+                    <td contenteditable="true">${TRANSACTIONDATE}</td>
+                    <td contenteditable="true">${TRANSACTIONTIME}</td>
+                    <td contenteditable="true">${ITEMS}</td>
+                    <td contenteditable="true">${PRICE}</td>
+                    <td contenteditable="true">${TOTAL}</td>
+                    <td contenteditable="true">${VATTAX}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    });
     </script>
+    
     <!-- Include JavaScript resources -->
     <script src="/static/js/jquery.1.8.3.min.js"></script>
     <script src="/static/js/wow.min.js"></script>
@@ -424,7 +504,7 @@
     <script src="/static/js/lightbox.min.js"></script>
     <script src="/static/js/site.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
-
+    
 </body>
 
 </html>

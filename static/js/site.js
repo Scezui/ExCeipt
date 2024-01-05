@@ -64,7 +64,7 @@ $(window).load(function() { // makes sure the whole site is loaded
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var canvas = new fabric.Canvas('c3', { width: 600, height: 700 });
+    var canvas = new fabric.Canvas('c3', { width: 700, height: 700 });
 
     var image = document.getElementById('my-image');
     var originalScale;

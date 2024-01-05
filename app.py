@@ -1,5 +1,5 @@
 import pytesseract
-from flask import Flask, request, render_template, jsonify, send_file, redirect, url_for
+from flask import Flask, request, render_template, jsonify, send_file, redirect, url_for, flash, send_from_directory
 from PIL import Image, ImageDraw
 import torch
 from transformers import LayoutLMv2ForTokenClassification, LayoutLMv3Tokenizer
@@ -15,6 +15,17 @@ from fastai import *
 from fastai.vision import *
 from fastai.metrics import error_rate
 from werkzeug.utils import secure_filename
+import pandas as pd
+from itertools import zip_longest
+import inspect
+from threading import Lock
+
+import warnings
+
+# Ignore SourceChangeWarning
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+# warnings.filterwarnings("ignore", category=SourceChangeWarning)
+
 
 UPLOAD_FOLDER = 'static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -31,9 +42,11 @@ app.config['SECRET_KEY'] = 'supersecretkey'
 def index():
     return render_template('index.html')
 
+
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -52,12 +65,13 @@ def upload_file():
             return redirect(url_for('rename_file', old_name=filename))
     return render_template('index.html')
 
+
 def make_prediction(image_path):
     try:
-        # temp = pathlib.PosixPath  # Save the original state
-        # pathlib.PosixPath = pathlib.WindowsPath  # Change to WindowsPath temporarily
+        temp = pathlib.PosixPath  # Save the original state
+        pathlib.PosixPath = pathlib.WindowsPath  # Change to WindowsPath temporarily
 
-        model_path = Path(r'model/export')
+        model_path = Path(r'model\export')
 
         learner = load_learner(model_path)
 
@@ -70,23 +84,17 @@ def make_prediction(image_path):
         # If you want the predicted class as a string
         predicted_class_str = str(prediction_class)
 
-        if predicted_class_str.lower() == 'receipt':
-            # Redirect to run_inference route or any other route
-            return '''This is a Valid Receipt
-            '''
-        else:
-            return '''This is not a Valid Receipt
-            '''   
-            
+        return predicted_class_str
 
     except Exception as e:
         return {"error": str(e)}
-    # finally:
-    #     pathlib.PosixPath = temp 
+    finally:
+        pathlib.PosixPath = temp 
+
 
 @app.route('/rename/<old_name>', methods=['GET', 'POST'])
 def rename_file(old_name):
-    new_name = 'temp.' + old_name.rsplit('.', 1)[-1]  # Get the file extension from the old_name
+    new_name = 'temp.jpg'
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], old_name)
     new_file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_name)
 
@@ -99,19 +107,39 @@ def rename_file(old_name):
         return render_template('extractor.html', uploaded_file=new_name, old_name=old_name, prediction_result=prediction_result)
     else:
         return 'File not found'
+    
+    
+@app.route('/get_inference_image')
+def get_inference_image():
+    # Assuming the new image is stored in the 'inferenced' folder with the name 'temp_inference.jpg'
+    inferenced_image = 'inferenced/temp_inference.jpg'
+    return jsonify(updatedImagePath=inferenced_image), 200  # Return the image path with a 200 status code
+    
+# Define a lock object
+inference_lock = Lock()
 
-        
 @app.route('/run_inference', methods=['GET'])
 def run_inference():
-    # defining inference parameters
-    model_path =  Path(r'model') # path to Layoutlmv3 model
-    images_path =  Path(r'static/uploads')# images folder
-    # Build the command
-    subprocess.check_call([sys.executable, "predictions/inference/run_inference.py", "--model_path", model_path, "--images_path", images_path])
-    return redirect(url_for('create_csv'))
+    # print(f"run_inference was called from {inspect.stack()[1].filename} at line {inspect.stack()[1].lineno}")
+    if inference_lock.locked():
+        return '', 204  # Return an empty response with a 204 status code
+    
+    # Acquire the lock before starting the inference process
+    with inference_lock:
+        try:
 
+            model_path = r"model" # path to Layoutlmv3 model
+            images_path = r"static/uploads" # images folder
+            # Your inference process code here
+            subprocess.check_call([sys.executable, "static/inference/run_inference.py", "--model_path", model_path, "--images_path", images_path])
+            return redirect(url_for('create_csv'))
+        except Exception as e:
+            return jsonify({"error": str(e)})
+            
 
-# Define a route for creating CSV
+# Define a function to replace all symbols with periods
+def replace_symbols_with_period(value):
+    return re.sub(r'\W+', '.', str(value))
 @app.route('/create_csv', methods=['GET'])
 def create_csv():
     try:
@@ -140,42 +168,44 @@ def create_csv():
             'PRICE', 'TOTAL', 'VATTAX'
         ]
 
+        # Writing data to CSV file with ordered columns
         with open(output_file_path, 'w', newline='') as csvfile:
-            csv_writer = csv.DictWriter(csvfile, fieldnames=column_order)
+            csv_writer = csv.DictWriter(csvfile, fieldnames=column_order, delimiter="|")
             csv_writer.writeheader()
-            
-            # Determining the maximum number of texts for any label
-            max_texts = max(len(label_texts[label]) if label in label_texts else 0 for label in column_order)
-            
-            # Filling in the CSV rows with texts for each label
-            for i in range(max_texts):
-                row_data = {
-                    label: label_texts[label][i] if label in label_texts and i < len(label_texts[label]) else '' 
-                    for label in column_order
-                }
-                
-                # Splitting items and prices into new rows if they have more than one word
-                if 'ITEMS' in row_data and 'PRICE' in row_data:
-                    items = row_data['ITEMS'].split()
-                    prices = row_data['PRICE'].split()
-                    
-                    if len(items) > 1 and len(prices) > 1:
-                        # Write the first item and price in the first row
-                        row_data['ITEMS'] = items[0]
-                        row_data['PRICE'] = prices[0]
-                        csv_writer.writerow(row_data)
-                        
-                        # Write the remaining items and prices in new rows
-                        for item, price in zip(items[1:], prices[1:]):
-                            csv_writer.writerow({'ITEMS': item, 'PRICE': price})
 
-        return redirect(url_for('get_data'))
+            # Iterating over each item and price, creating a new row for each pair
+            items = label_texts.get('ITEMS', [])
+            prices = label_texts.get('PRICE', [])
+            
+            for i in range(max(len(items), len(prices))):
+                item_words = items[i].split() if i < len(items) else ['']
+                price_words = prices[i].split() if i < len(prices) else ['']
+
+                for j, (item, price) in enumerate(zip_longest(item_words, price_words, fillvalue='')):
+                    row_data = {
+                        'ITEMS': item,
+                        'PRICE': replace_symbols_with_period(price) if 'PRICE' in label_texts else price  # Replace symbols with period
+                    }
+                    if j == 0:
+                        row_data.update({
+                            label: replace_symbols_with_period(label_texts[label][0]) if label in ['TOTAL', 'VATTAX'] and label in label_texts and 0 < len(label_texts[label]) else label_texts[label][0] if label in label_texts and 0 < len(label_texts[label]) else '' 
+                            for label in column_order if label not in ['ITEMS', 'PRICE']
+                        })
+                    
+                    csv_writer.writerow(row_data)
+
+        return '', 204  # Return an empty response with a 204 status code
     except Exception as e:
         return jsonify({"error": str(e)})
 
+        
+@app.route('/get_data')
+def get_data():
+    return send_from_directory('inferenced','output.csv', as_attachment=False)
 
+from flask import jsonify
 
-'''@app.route('/download_csv', methods=['GET'])
+@app.route('/download_csv', methods=['GET'])
 def download_csv():
     try:
         output_file_path = r"inferenced\output.csv"  # path to output CSV file
@@ -184,38 +214,10 @@ def download_csv():
         if os.path.exists(output_file_path):
             return send_file(output_file_path, as_attachment=True, download_name='output.csv')
         else:
-            flash('CSV file not found', 'error')
-            return render_template('extractor.html')
+            return jsonify({"error": "CSV file not found"})
     except Exception as e:
-        flash(f'Download failed: {str(e)}', 'error')
-        return render_template('extractor.html')'''
-    
-@app.route('/get_data')
-def get_data():
-    # Adjust the path to your CSV file
-    csv_path = 'inferenced/output.csv'
-    
-    # Send the CSV file as a response
-    return send_file(csv_path, as_attachment=True)
-
-@app.route('/update_data', methods=['POST'])
-def update_data():
-    try:
-        data = request.json.get('data')
-        
-        # Path to the CSV file
-        csv_path = 'inferenced/output.csv'
-
-        # Write the updated data to the CSV file
-        with open(csv_path, 'w', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            for row in data:
-                csv_writer.writerow(row.split(','))
-
-        return jsonify({'success': True, 'message': 'Data updated successfully'})
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'Error updating data: {str(e)}'})
+        return jsonify({"error": f"Download failed: {str(e)}"})
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)

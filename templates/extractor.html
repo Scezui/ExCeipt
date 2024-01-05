@@ -347,15 +347,16 @@
             <div class="receipt">
                 <div class="details">
             <div style="display: flex; align-items: center;">
-			{% if prediction_result | default('').lower() == 'receipt' %}
-            <lord-icon
-                src="https://cdn.lordicon.com/lomfljuq.json"
-                trigger="in"
-                delay="1500"
-                colors="primary:#16c72e"
-                state="morph-check-in-1"
-                style="width:25px;height:25px">
-            </lord-icon>
+			{% set lower_prediction = prediction_result | default('') | lower %}
+			{% if lower_prediction == 'receipt' %}
+				<lord-icon
+					src="https://cdn.lordicon.com/lomfljuq.json"
+					trigger="in"
+					delay="1500"
+					colors="primary:#16c72e"
+					state="morph-check-in-1"
+					style="width:25px;height:25px">
+				</lord-icon>
             <p class="valid">The image uploaded is a Valid Receipt.</p>
             {% else %}
             <lord-icon
